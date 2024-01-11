@@ -5,11 +5,14 @@ import pandas as pd
 import os
 
 from db import *
+#from db import create_comment
 
 app = Flask(__name__)
 
 create_comment()
 create_execution()
+
+
     
 @app.route('/post_comment', methods=["POST"])
 def post_comment():
@@ -152,6 +155,66 @@ def save_dtdash_data():
         return result
     else:
         return jsonify({'error': 'Failed to fetch data from dtdash or add data to MongoDB'}), 500
+    
+
+# def get_collection_names(data):
+#     return data
+
+# @app.route('/send_collections', methods=['POST'])  
+# def handle_frontend_data():
+#     try:
+#         data_recieved = request.json
+#         #get_collection(data_recieved) 
+#         print('hello py',data_recieved)
+#         response_data = {'message':'Data recieved successfully!'}
+#         return jsonify(response_data), 200
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500  
+
+@app.route('/send_collections', methods=['POST'])  
+def handle_frontend_data():
+    try:
+        print("----reached here in try")
+        data_received =  request.get_json()
+        print("data------",data_received)
+        collection1 =  data_received['active_release_cycle']
+        collection2 =  data_received['baseline_release_cycle']
+        get_collection(collection1,collection2)
+        # Assuming add_frontend_data is a function that adds data to the database
+        print('awadhesh')
+        
+        if True:
+            response_data = {'message': 'Data received and saved successfully!'}
+            return jsonify(response_data), 200
+        else:
+            return jsonify({'error': 'Failed to save data to the database'}), 500
+
+    except Exception as e:
+        print("---inside except")
+        return jsonify({'error': str(e)}), 500  
+
+# @app.route('/send_collections', methods=['POST'])
+# def handle_frontend_data():
+#     try:
+#         data_received = request.json
+#         print(data_received)
+
+#         # Extract the relevant data from the request
+#         updated_comment = data_received.get("updated_comment", {})
+
+#         # Assuming that "updated_comment" contains the necessary data
+#         # Update the comment in the MongoDB collection
+#         result = update_existing_comment(db1, collection1, {"_id": ObjectId(updated_comment["_id"])}, updated_comment)
+
+#         if result:
+#             response_data = {'message': 'Updated comment saved successfully!'}
+#             return jsonify(response_data), 200
+#         else:
+#             return jsonify({'error': 'Failed to save updated comment to the database'}), 500
+
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

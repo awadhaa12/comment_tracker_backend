@@ -1,11 +1,15 @@
 from pymongo import MongoClient
 from pymongo.operations import IndexModel
-
+# from app import get_collection_names
 url = "mongodb://localhost:27017/"
 client = MongoClient(url)
 
 db1 = client["comment"]
 db2 = client["execution"]
+
+# col11 = ""
+# col22 = ""
+
 
 
 def create_collection(db, collection_name):
@@ -15,7 +19,20 @@ def create_collection(db, collection_name):
     else:
         print(f"Collection '{collection_name}' already exists")
 
+def get_collection(col1,col2):
+    col11 = col1
+    col22 = col2
+    temp = []
+    temp.append(col11)
+    temp.append(col22)
+    return temp
+
+# data = get_collection_names()
+
+
 collections_to_create = ['17.14.1_cycle_1', '17.14.1_cycle_1']
+# collections_to_create = get_collection(collection1,collection2)
+
 collection1 = collections_to_create[0]
 collection2 = collections_to_create[1]
 
